@@ -263,7 +263,7 @@
             // Simulate processing time for realism
             await new Promise(r => setTimeout(r, 500));
 
-            let res = await fetch("proxy.php?search=" + query);
+            let res = await fetch("Proxy.php?search=" + query);
             let rawText = await res.text();
             
             // Clean specific garbage text if exists
