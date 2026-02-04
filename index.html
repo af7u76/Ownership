@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>VIP DATA CENTER</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --primary: #00ff9f;
+        --bg: #000000;
+        --panel: #0a0a0a;
+        --dim: #003d26;
+        --wa-color: #25D366;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        margin: 0;
+        font-family: 'Share Tech Mono', monospace;
+        background-color: var(--bg);
+        color: var(--primary);
+        padding: 10px;
+        padding-bottom: 80px; /* Space for fixed button */
+        min-height: 100vh;
+    }
+
+    /* Terminal Scanline Overlay */
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: repeating-linear-gradient(0deg, rgba(0,0,0,0.1), rgba(0,0,0,0.1) 1px, transparent 1px, transparent 2px);
+        pointer-events: none;
+        z-index: 50;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 51;
+    }
+
+    .header {
+        text-align: center;
+        border-bottom: 2px solid var(--dim);
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .header h1 { 
+        margin: 0; 
+        font-size: 28px; 
+        text-shadow: 0 0 15px var(--primary); 
+        letter-spacing: 2px;
+    }
+    
+    .header p { 
+        margin: 5px 0 0; 
+        font-size: 12px; 
+        color: #00cc80; 
+    }
+
+    /* Input Area */
+    .search-box {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 20px;
+        background: rgba(0,255,159,0.05);
+        padding: 10px;
+        border: 1px solid var(--dim);
+    }
+
+    input {
+        flex: 1;
+        background: #000;
+        border: 1px solid var(--primary);
+        color: var(--primary);
+        padding: 12px;
+        font-family: inherit;
+        font-size: 18px;
+        outline: none;
+    }
+
+    button {
+        background: var(--dim);
+        color: var(--primary);
+        border: 1px solid var(--primary);
+        padding: 0 20px;
+        font-family: inherit;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 16px;
+        text-transform: uppercase;
+    }
+    
+    button:active { background: var(--primary); color: #000; }
+
+    /* Result Terminal */
+    #terminal-output {
+        min-height: 120px;
+        background: rgba(0, 10, 5, 0.8);
+        padding: 15px;
+        border-left: 4px solid var(--primary);
+        border-top: 1px solid var(--dim);
+        border-right: 1px solid var(--dim);
+        border-bottom: 1px solid var(--dim);
+        white-space: pre-wrap;
+        line-height: 1.4;
+        font-size: 14px;
+        color: #e0fff4;
+        margin-bottom: 20px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    /* Paid Services Grid */
+    .services-panel {
+        border: 1px dashed var(--dim);
+        padding: 15px;
+        margin-top: 20px;
+        background: rgba(0,0,0,0.3);
+    }
+
+    .srv-title {
+        color: var(--wa-color);
+        font-size: 16px;
+        margin-bottom: 10px;
+        text-align: center;
+        text-decoration: underline;
+    }
+
+    .srv-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        font-size: 12px;
+    }
+
+    .srv-item {
+        color: #88cca3;
+        padding-left: 5px;
+        border-left: 2px solid var(--dim);
+    }
+
+    /* FIXED WHATSAPP BUTTON */
+    .wa-float-btn {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 400px;
+        background-color: var(--wa-color);
+        color: #000;
+        text-decoration: none;
+        padding: 14px 20px;
+        border-radius: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 16px;
+        box-shadow: 0 0 15px rgba(37, 211, 102, 0.4);
+        z-index: 999;
+        border: 2px solid #fff;
+        animation: pulse 2s infinite;
+    }
+
+    .wa-float-btn svg {
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+        fill: #000;
+    }
+
+    @keyframes pulse {
+        0% { transform: translateX(-50%) scale(1); }
+        50% { transform: translateX(-50%) scale(1.02); box-shadow: 0 0 25px rgba(37, 211, 102, 0.7); }
+        100% { transform: translateX(-50%) scale(1); }
+    }
+
+    .cursor {
+        display: inline-block;
+        width: 8px;
+        height: 15px;
+        background: var(--primary);
+        animation: blink 0.8s infinite;
+        vertical-align: middle;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>VIP DATA v4</h1>
+        <p>[ ACCESS GRANTED: 192.168.X.X ]</p>
+    </div>
+
+    <div class="search-box">
+        <input type="number" id="inputField" placeholder="ENTER NUMBER / CNIC">
+        <button onclick="startSearch()">SCAN</button>
+    </div>
+
+    <div id="terminal-output">SYSTEM READY...<br>WAITING FOR INPUT...<span class="cursor"></span></div>
+
+    <div class="services-panel">
+        <div class="srv-title">PREMIUM DATABASE ACCESS</div>
+        <div class="srv-list">
+            <div class="srv-item">> CDR / CALL HISTORY</div>
+            <div class="srv-item">> LIVE LOCATION</div>
+            <div class="srv-item">> TRAVEL HISTORY</div>
+            <div class="srv-item">> NADRA FAMILY TREE</div>
+            <div class="srv-item">> CNIC COLOR COPY</div>
+            <div class="srv-item">> VEHICLE OWNERSHIP</div>
+            <div class="srv-item">> F.I.R CHECK</div>
+            <div class="srv-item">> FRESH DATA (300/-)</div>
+        </div>
+    </div>
+</div>
+
+<a href="https://wa.me/923055236949?text=Sir%20I%20need%20Paid%20Service%20Details" class="wa-float-btn" target="_blank">
+    <svg viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.698c1.005.572 1.913.846 2.803.846 3.18 0 5.768-2.586 5.768-5.766.001-3.18-2.587-5.767-5.765-5.767zm12.969 5.766c0 7.155-5.845 13-13 13-2.106 0-3.676-.574-5.267-1.343l-4.72 1.242 1.264-4.593c-1.005-1.742-1.277-3.238-1.277-5.306 0-7.155 5.845-13 13-13s13 5.845 13 13z"/></svg>
+    ORDER PAID DATA (WHATSAPP)
+</a>
+
+<script>
+    const outputDiv = document.getElementById('terminal-output');
+    const inputField = document.getElementById('inputField');
+    let typingTimeout;
+
+    function typeWriter(text, index = 0, isError = false) {
+        if (index === 0) outputDiv.innerHTML = "";
+        
+        if (index < text.length) {
+            outputDiv.innerHTML = text.substring(0, index + 1) + '<span class="cursor"></span>';
+            typingTimeout = setTimeout(() => typeWriter(text, index + 1, isError), 15);
+        } else {
+            // Typing Complete
+            if(isError) {
+                outputDiv.innerHTML += `<br><br><span style="color:#25D366">>> CLICK WHATSAPP BUTTON BELOW FOR PAID DATA</span>`;
+            }
+        }
+    }
+
+    async function startSearch() {
+        let query = inputField.value.trim();
+        
+        if(!query) {
+            outputDiv.innerHTML = "> ERROR: FIELD EMPTY<span class='cursor'></span>";
+            return;
+        }
+
+        clearTimeout(typingTimeout);
+        outputDiv.innerHTML = '> CONNECTING TO SERVER...<span class="cursor"></span>';
+
+        try {
+            // Simulate processing time for realism
+            await new Promise(r => setTimeout(r, 500));
+
+            let res = await fetch("proxy.php?search=" + query);
+            let rawText = await res.text();
+            
+            // Clean specific garbage text if exists
+            rawText = rawText.replace("Mobile response:", "").trim();
+            
+            let jsonData = [];
+            try { jsonData = JSON.parse(rawText); } catch(e) {}
+
+            if (jsonData.length > 0) {
+                // DATA FOUND
+                let report = "\n[ TARGET IDENTIFIED ]\n====================\n";
+                jsonData.forEach(item => {
+                    report += `\n> NAME: ${item.nam}`;
+                    report += `\n> CNIC: ${item.cni}`;
+                    report += `\n> CELL: ${item.nbr}`;
+                    report += `\n> ADDR: ${item.adr}`;
+                    report += `\n--------------------\n`;
+                });
+                report += "\n[ END OF REPORT ]";
+                typeWriter(report);
+            } else {
+                // DATA NOT FOUND
+                let errorMsg = "\n[ ! ] FREE DATA NOT FOUND\n";
+                errorMsg += "--------------------------\n";
+                errorMsg += "> TARGET NOT IN PUBLIC RECORD.\n";
+                errorMsg += "> TRY PAID DATABASE ACCESS.\n";
+                errorMsg += "> CONTACT ADMIN BELOW.";
+                
+                typeWriter(errorMsg, 0, true);
+            }
+
+        } catch (error) {
+            typeWriter("> CRITICAL ERROR: SERVER OFFLINE.");
+        }
+    }
+    
+    // Allow Enter Key
+    inputField.addEventListener("keypress", function(e) {
+        if (e.key === "Enter") startSearch();
+    });
+
+</script>
+
+</body>
+</html>
